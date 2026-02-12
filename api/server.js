@@ -17,7 +17,7 @@ app.get("/api/health", (req, res) => {
 });
 
 app.get("/api/message", (req, res) => {
-  res.json({ message: "Hello from Node.js API!!!" });
+  res.json({ message: "Hello from Node.js API!" });
 });
 
 app.listen(PORT, "0.0.0.0", () => {
