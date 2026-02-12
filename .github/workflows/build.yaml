@@ -31,7 +31,7 @@ jobs:
         run: |
           git clone https://${{ secrets.GH_TOKEN }}@github.com/kuzyo/gitops-k8-config.git
           cd gitops-k8-config
-          sed -i "s|image: kuzyoyaroslav/gitops-fullstack-app:.*|image: kuzyoyaroslav/gitops-fullstack-app:${{ github.sha }}|" dev/deployment.yaml
+          sed -i "s|image: kuzyoyaroslav/gitops-fullstack-app:.*|image: kuzyoyaroslav/gitops-fullstack-app:${{ github.sha }}|" development/deployment.yaml
           git config user.name "GitHub Actions"
           git config user.email "actions@github.com"
           git add .
