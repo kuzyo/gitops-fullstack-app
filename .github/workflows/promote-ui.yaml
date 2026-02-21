@@ -1,0 +1,30 @@
+name: Promote to Environment
+
+on:
+  workflow_dispatch:
+    inputs:
+      environment:
+        description: "Target environment"
+        required: true
+        type: choice
+        options:
+          - staging
+          - production
+      image_tag:
+        description: "Image tag to deploy"
+        required: true
+
+jobs:
+  promote:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Update manifest
+        run: |
+          git clone https://${{ secrets.GH_TOKEN }}@github.com/kuzyo/gitops-k8-config.git
+          cd gitops-k8-config
+          sed -i "s|image: kuzyoyaroslav/gitops-fullstack-app-ui:.*|image: kuzyoyaroslav/gitops-fullstack-app-ui:${{ inputs.image_tag }}|" ${{ inputs.environment }}/ui-deployment.yaml
+          git config user.name "GitHub Actions"
+          git config user.email "actions@github.com"
+          git add .
+          git commit -m "Promote UI image ${{ inputs.image_tag }} to ${{ inputs.environment }}"
+          git push
