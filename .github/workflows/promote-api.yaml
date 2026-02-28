@@ -1,4 +1,4 @@
-name: Promote UI to Environment
+name: Promote API to Environment
 
 on:
   workflow_dispatch:
@@ -28,7 +28,7 @@ jobs:
           sudo chmod +x /usr/local/bin/yq
 
           # Update image tag in the target environment
-          yq -i '.image.tag = "${{ inputs.image_tag }}"' charts/ui/environments/${{ inputs.environment }}/values.yaml
+          yq -i '.image.tag = "${{ inputs.image_tag }}"' charts/api/environments/${{ inputs.environment }}/values.yaml
 
           git config user.name "GitHub Actions"
           git config user.email "actions@github.com"
