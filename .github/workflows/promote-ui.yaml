@@ -22,7 +22,14 @@ jobs:
         run: |
           git clone https://${{ secrets.GH_TOKEN }}@github.com/kuzyo/gitops-k8-config.git
           cd gitops-k8-config
-          sed -i "s|image: kuzyoyaroslav/gitops-fullstack-app-ui:.*|image: kuzyoyaroslav/gitops-fullstack-app-ui:${{ inputs.image_tag }}|" ${{ inputs.environment }}/ui-deployment.yaml
+
+          # Install yq
+          sudo wget -qO /usr/local/bin/yq https://github.com/mikefarah/yq/releases/latest/download/yq_linux_amd64
+          sudo chmod +x /usr/local/bin/yq
+
+          # Update image tag in the target environment
+          yq -i '.image.tag = "${{ inputs.image_tag }}"' charts/ui/environments/${{ inputs.environment }}/values.yaml
+
           git config user.name "GitHub Actions"
           git config user.email "actions@github.com"
           git add .

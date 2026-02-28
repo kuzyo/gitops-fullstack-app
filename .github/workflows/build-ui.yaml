@@ -38,8 +38,14 @@ jobs:
         run: |
           git clone https://${{ secrets.GH_TOKEN }}@github.com/kuzyo/gitops-k8-config.git
           cd gitops-k8-config
-          # Only update development - NOT staging/production
-          sed -i "s|image: kuzyoyaroslav/gitops-fullstack-app-ui:.*|image: kuzyoyaroslav/gitops-fullstack-app-ui:${{ github.sha }}|" development/ui-deployment.yaml
+
+          # Install yq
+          sudo wget -qO /usr/local/bin/yq https://github.com/mikefarah/yq/releases/latest/download/yq_linux_amd64
+          sudo chmod +x /usr/local/bin/yq
+
+          # Update image tag in development values
+          yq -i '.image.tag = "${{ github.sha }}"' charts/ui/environments/development/values.yaml
+
           git config user.name "GitHub Actions"
           git config user.email "actions@github.com"
           git add .
